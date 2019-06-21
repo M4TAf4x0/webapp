@@ -62,4 +62,26 @@ public class User extends AuditingEntity implements Serializable {
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private Set<Role> roles = new HashSet<>();
+
+    /**
+     * Add a role
+     *
+     * @param role the role
+     * @return the persisted entity
+     */
+    public User addRole(Role role) {
+        this.roles.add(role);
+        return this;
+    }
+
+    /**
+     * Remove a role
+     *
+     * @param role the role
+     * @return the persisted entity
+     */
+    public User removeRole(Role role) {
+        this.roles.remove(role);
+        return this;
+    }
 }
