@@ -29,7 +29,7 @@ public class EmailAuthenticationProvider implements AuthenticationProvider {
     }
 
     /**
-     * Authenticate an user.
+     * Authenticate a user.
      *
      * @param auth the Authentication instance
      * @return the authentication token
@@ -53,7 +53,7 @@ public class EmailAuthenticationProvider implements AuthenticationProvider {
      * @param username the username
      * @param password the password
      * @param user     the User entity
-     * @return the token
+     * @return the authentication token
      */
     private UsernamePasswordAuthenticationToken generateTokenWithUsernameAndPassword(
             String username,

@@ -1,5 +1,5 @@
-#Spring boot Web App
-##Monolithic archetype for a Spring Boot Web application
+# Spring boot Web App
+## Monolithic archetype for a Spring Boot Web application
 
 Archetype of easy implementation for a quick construction of a 
 transactional web application.
