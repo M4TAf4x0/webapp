@@ -2,6 +2,7 @@ package com.archetype.monolithic.webapp.controller.authentication;
 
 import com.archetype.monolithic.webapp.domain.User;
 import com.archetype.monolithic.webapp.service.UserService;
+import com.archetype.monolithic.webapp.service.dto.UserDTO;
 import com.archetype.monolithic.webapp.service.model.SignupFormModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,11 +57,10 @@ public class AuthenticationController {
         log.debug("POST request to register User : {}", signupFormModel);
 
         if (!bindingResult.hasErrors()) {
-            User newUser = new User();
+            UserDTO newUser = new UserDTO();
             newUser.setEmail(signupFormModel.getEmail());
             newUser.setFirstName(signupFormModel.getFirstName());
             newUser.setLastName(signupFormModel.getLastName());
-
             userService.registerUser(newUser, signupFormModel.getPassword());
         }
 

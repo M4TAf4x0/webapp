@@ -27,6 +27,6 @@ public class Role implements Serializable {
 
     @NotNull
     @Size(max = 50)
-    @Column(length = 50)
+    @Column(length = 50, nullable = false, unique = true)
     private String name;
 }

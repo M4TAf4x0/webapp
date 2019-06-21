@@ -16,8 +16,6 @@ public class SignupFormModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
-
     @Email
     @NotEmpty
     private String email;

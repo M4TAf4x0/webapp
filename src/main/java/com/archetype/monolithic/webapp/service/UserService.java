@@ -2,18 +2,22 @@ package com.archetype.monolithic.webapp.service;
 
 import com.archetype.monolithic.webapp.config.Constants;
 import com.archetype.monolithic.webapp.domain.User;
-import com.archetype.monolithic.webapp.errors.BadRequestException;
 import com.archetype.monolithic.webapp.repository.RoleRepository;
 import com.archetype.monolithic.webapp.repository.UserRepository;
+import com.archetype.monolithic.webapp.security.RolesConstants;
 import com.archetype.monolithic.webapp.security.SecurityUtils;
+import com.archetype.monolithic.webapp.service.dto.RoleDTO;
+import com.archetype.monolithic.webapp.service.dto.UserDTO;
+import com.archetype.monolithic.webapp.service.mapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 /**
  * Service Implementation for managing User.
@@ -25,11 +29,14 @@ public class UserService {
     private final Logger          log = LoggerFactory.getLogger(UserService.class);
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository  roleRepository;
+    private final UserMapper      userMapper;
     private final UserRepository  userRepository;
 
-    public UserService(PasswordEncoder passwordEncoder, RoleRepository roleRepository, UserRepository userRepository) {
+    public UserService(PasswordEncoder passwordEncoder, RoleRepository roleRepository,
+                       UserMapper userMapper, UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
         this.roleRepository  = roleRepository;
+        this.userMapper      = userMapper;
         this.userRepository  = userRepository;
     }
 
@@ -47,23 +54,29 @@ public class UserService {
     /**
      * Register a user.
      *
-     * @param user     the user to register
+     * @param userDTO  the user to register
      * @param password the user password
      * @return the persisted entity
      */
     @Transactional(readOnly = true)
-    public User registerUser(User user, String password) {
-        log.debug("Request to register User : {}", user);
+    public UserDTO registerUser(UserDTO userDTO, String password) {
+        log.debug("Request to register User : {}", userDTO);
 
-        if (user.getId() != null) {
-            throw new BadRequestException("A new user can not have an id");
+
+        if (userDTO.getLangKey() == null) {
+            userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
         }
 
-        if (user.getLangKey() == null) {
-            user.setLangKey(Constants.DEFAULT_LANGUAGE);
-        }
+        userDTO.setPassword(passwordEncoder.encode(password));
 
-        user.setPassword(passwordEncoder.encode(password));
-        return userRepository.save(user);
+        RoleDTO roleDTO = new RoleDTO();
+        roleDTO.setName(RolesConstants.USER);
+        Set<RoleDTO> roles = new HashSet<>();
+        roles.add(roleDTO);
+        userDTO.setRoles(roles);
+        User user = userMapper.toEntity(userDTO);
+        log.debug(user.toString());
+
+        return userMapper.toDto(userRepository.save(user));
     }
 }

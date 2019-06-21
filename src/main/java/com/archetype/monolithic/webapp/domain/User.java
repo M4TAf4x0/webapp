@@ -56,7 +56,7 @@ public class User extends AuditingEntity implements Serializable {
     private String langKey;
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(
             name = "user_role",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
