@@ -41,7 +41,7 @@ public class EmailAuthenticationProvider implements AuthenticationProvider {
         final String username = auth.getName();
         final String password = auth.getCredentials().toString();
 
-        return userRepository.findOneWithRolesByEmail(username)
+        return userRepository.findOneWithRolesByEmailIgnoreCase(username)
                 .map(user -> generateTokenWithUsernameAndPassword(username, password, user))
                 .orElseThrow(() -> new UsernameNotFoundException(
                                 "User with email " + username + " was not found in the " + "database"));

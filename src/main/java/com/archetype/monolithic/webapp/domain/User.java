@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -16,7 +17,7 @@ import java.util.Set;
  * An User.
  */
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 @Getter
 @Setter
 @ToString
@@ -56,11 +57,25 @@ public class User extends AuditingEntity implements Serializable {
     private String langKey;
 
     @JsonIgnore
-    @ManyToMany()
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
     @JoinTable(
             name = "user_role",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+            joinColumns = {
+                    @JoinColumn(
+                            name = "user_id",
+                            referencedColumnName = "id")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(
+                            name = "role_id",
+                            referencedColumnName = "id")
+            })
+    @BatchSize(size = 20)
     private Set<Role> roles = new HashSet<>();
 
     /**

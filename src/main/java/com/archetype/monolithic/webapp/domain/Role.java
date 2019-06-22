@@ -13,7 +13,7 @@ import java.io.Serializable;
  * A Role.
  */
 @Entity
-@Table(name = "roles")
+@Table(name = "role")
 @Getter
 @Setter
 @ToString
@@ -29,4 +29,12 @@ public class Role implements Serializable {
     @Size(max = 50)
     @Column(length = 50, nullable = false, unique = true)
     private String name;
+
+    public Role() {
+
+    }
+
+    public Role(@NotNull @Size(max = 50) String name) {
+        this.name = name;
+    }
 }

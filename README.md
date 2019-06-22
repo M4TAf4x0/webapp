@@ -10,4 +10,4 @@ MVC Architecture
 + Authorization with multiple roles
 + Multi language support
 + Auditing tables
-+ ORM JPA hibernate for OLDP (OnLine Transactional Processing) sites
++ ORM JPA hibernate for OLDP (OnLine Transactional Processing) systems

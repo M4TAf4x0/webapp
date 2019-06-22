@@ -1,4 +1,4 @@
-package com.archetype.monolithic.webapp.service.model;
+package com.archetype.monolithic.webapp.controller.authentication.model;
 
 import lombok.Getter;
 import lombok.Setter;
