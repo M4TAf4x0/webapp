@@ -43,7 +43,7 @@ public class UserController {
     /**
      * GET  /users : get all the users.
      *
-     * @param model the View model
+     * @param model the view model
      * @param page  the page
      * @return the users list view
      */
@@ -55,16 +55,16 @@ public class UserController {
         Pageable pageable    = PageRequest.of(currentPage - 1, 30, Sort.by("id").descending());
         model.addAttribute("userList", userRepository.findAll(pageable));
 
-        return "user/list";
+        return "user/userList";
     }
 
     /**
      * GET  /user/:uuid : get the user by uuid.
      *
-     * @param uuid          the uuid
-     * @param userFormModel the User model
-     * @param model         the View model
-     * @return the user
+     * @param uuid          the user uuid
+     * @param userFormModel the user model
+     * @param model         the view model
+     * @return the user form view
      */
     @GetMapping("/user/{uuid}")
     public String viewUser(@PathVariable String uuid,
@@ -92,9 +92,18 @@ public class UserController {
                         () -> new ResourceNotExistException(
                                 "The user : " + uuid + "does not exist."));
 
-        return "user/view";
+        return "user/userForm";
     }
 
+    /**
+     * GET  /user/:uuid : update user.
+     *
+     * @param uuid          the user uuid
+     * @param userFormModel the user model
+     * @param bindingResult the binding result
+     * @param model         the view model
+     * @return the user form view
+     */
     @PostMapping("/user/{uuid}")
     public String updateUser(@PathVariable String uuid,
                              @Valid @ModelAttribute UserFormModel userFormModel,
@@ -130,6 +139,22 @@ public class UserController {
             }
         }
 
-        return "user/view";
+        return "user/userForm";
+    }
+
+    /**
+     * GET  /users/:add : add a new user.
+     *
+     * @param userFormModel the user model
+     * @param model         the view model
+     * @return the user form view
+     */
+    @GetMapping("users/add")
+    public String addUser(@ModelAttribute UserFormModel userFormModel, Model model) {
+        log.debug("GET request to add a new user");
+
+        model.addAttribute("rolesList", roleRepository.findAll());
+
+        return "user/userForm";
     }
 }
