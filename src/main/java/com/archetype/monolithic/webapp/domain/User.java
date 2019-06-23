@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * An User.
@@ -31,7 +32,7 @@ public class User extends AuditingEntity implements Serializable {
 
     @Size(min = 36, max = 36)
     @Column(name = "uuid", length = 36, unique = true)
-    private String uuid;
+    private String uuid = UUID.randomUUID().toString();
 
     @NotNull
     @Size(min = 5, max = 255)

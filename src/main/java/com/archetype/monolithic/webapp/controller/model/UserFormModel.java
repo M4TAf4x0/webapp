@@ -1,4 +1,4 @@
-package com.archetype.monolithic.webapp.controller.authentication.model;
+package com.archetype.monolithic.webapp.controller.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,11 +8,16 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+/**
+ * A view model for the User entity.
+ */
 @Getter
 @Setter
 @ToString
-public class SignupFormModel implements Serializable {
+public class UserFormModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,4 +35,6 @@ public class SignupFormModel implements Serializable {
     @NotEmpty
     @Size(max = 50)
     private String lastName;
+
+    private Set<String> roles = new HashSet<>();
 }

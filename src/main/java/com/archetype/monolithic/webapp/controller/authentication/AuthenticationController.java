@@ -1,6 +1,6 @@
 package com.archetype.monolithic.webapp.controller.authentication;
 
-import com.archetype.monolithic.webapp.controller.authentication.model.SignupFormModel;
+import com.archetype.monolithic.webapp.controller.model.UserFormModel;
 import com.archetype.monolithic.webapp.domain.Role;
 import com.archetype.monolithic.webapp.domain.User;
 import com.archetype.monolithic.webapp.security.RolesConstants;
@@ -44,7 +44,7 @@ public class AuthenticationController {
      * @return the sign up view
      */
     @GetMapping("/signup")
-    public String signup(@ModelAttribute SignupFormModel signupFormModel) {
+    public String signup(@ModelAttribute UserFormModel userFormModel) {
         return "authentication/signup";
     }
 
@@ -54,19 +54,20 @@ public class AuthenticationController {
      * @return the sign up view
      */
     @PostMapping("/signup")
-    public String signup(@Valid @ModelAttribute SignupFormModel signupFormModel, BindingResult bindingResult) {
-        log.debug("POST request to register User : {}", signupFormModel);
+    public String signup(@Valid @ModelAttribute UserFormModel userFormModel,
+                         BindingResult bindingResult) {
+        log.debug("POST request to register User : {}", userFormModel);
 
         if (!bindingResult.hasErrors()) {
             User newUser = new User();
 
-            newUser.setEmail(signupFormModel.getEmail().toLowerCase());
-            newUser.setFirstName(signupFormModel.getFirstName());
-            newUser.setLastName(signupFormModel.getLastName());
+            newUser.setEmail(userFormModel.getEmail().toLowerCase());
+            newUser.setFirstName(userFormModel.getFirstName());
+            newUser.setLastName(userFormModel.getLastName());
             newUser.addRole(new Role(RolesConstants.USER));
 
-            if (userService.registerUser(newUser, signupFormModel.getPassword()).getId() != null) {
-                return "";
+            if (userService.registerUser(newUser, userFormModel.getPassword()).getId() != null) {
+                return "authentication/signup-success";
             }
         }
 

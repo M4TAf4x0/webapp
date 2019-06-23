@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:lang="${#locale.language}"
+      layout:decorate="~{/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Users</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container">
+        <div class="mx-auto pt-md-5 pt-3">
+            <div class="text-right mb-3">
+                <a href="/user/add" class="btn btn-primary" role="button"
+                   aria-pressed="true">
+                    <i class="fa fa-plus fa-fw"
+                       aria-hidden="true"></i> Add New
+                </a>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${userList}">
+                        <td th:text="${user.getEmail()}"></td>
+                        <td th:text="${user.getFirstName()}"></td>
+                        <td th:text="${user.getLastName()}"></td>
+                        <td>
+                            <a th:href="${'/user/' + user.getUuid()}"
+                               class="btn btn-secondary" role="button" aria-pressed="true">
+                                <i class="fa fa-pencil-square-o fa-fw"
+                                   aria-hidden="true"></i> Edit
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+</section>
+</body>
+</html>

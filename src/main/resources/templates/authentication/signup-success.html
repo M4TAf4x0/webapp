@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:lang="${#locale.language}"
+      layout:decorate="~{/authentication/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{signupSuccess}"></title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container">
+        <div class="mx-auto pt-md-5 pt-3">
+            <div class="jumbotron text-center">
+                <h1>
+                    <i class="fa fa-check-circle fa-3x text-success" aria-hidden="true"></i><br>
+                    <span th:text="#{yourAccountHasBeenCreatedSuccessfully}"></span>
+                </h1>
+                <a class="btn btn-primary btn-lg" href="/login" role="button" th:text="#{goToLoginPage}"></a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

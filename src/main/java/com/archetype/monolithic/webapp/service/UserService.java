@@ -8,6 +8,8 @@ import com.archetype.monolithic.webapp.repository.UserRepository;
 import com.archetype.monolithic.webapp.security.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +43,7 @@ public class UserService {
      */
     @Transactional(readOnly = true)
     public Optional<User> getCurrentUser() {
-        log.debug("Request to get the current User");
+        log.debug("Request to get the current user");
         return SecurityUtils.getCurrentUserLogin()
                 .flatMap(userRepository::findOneByEmailIgnoreCase);
     }
@@ -53,8 +55,7 @@ public class UserService {
      * @return the persisted entity
      */
     public User registerUser(User user, String password) {
-        log.debug("Request to register User : {}", user);
-
+        log.debug("Request to register user : {}", user);
 
         if (user.getId() != null) {
             throw new BadRequestException("A new user cannot have an id");
@@ -74,5 +75,30 @@ public class UserService {
         }
 
         return userRepository.save(user);
+    }
+
+
+    /**
+     * Get all users.
+     *
+     * @param pageable the pageable instance
+     * @return the page of users
+     */
+    @Transactional(readOnly = true)
+    public Page<User> findAll(Pageable pageable) {
+        log.debug("Request to get all users");
+        return userRepository.findAll(pageable);
+    }
+
+    /**
+     * Find user by uuid.
+     *
+     * @param uuid the uuid
+     * @return the user
+     */
+    @Transactional(readOnly = true)
+    public Optional<User> findOneByUuid(String uuid) {
+        log.debug("Request to get user : {}", uuid);
+        return userRepository.findByUuid(uuid);
     }
 }
