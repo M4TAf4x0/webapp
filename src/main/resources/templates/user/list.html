@@ -5,7 +5,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Users</title>
+    <title th:text="#{users}"></title>
 </head>
 <body>
 <section layout:fragment="content">
@@ -15,17 +15,18 @@
                 <a href="/user/add" class="btn btn-primary" role="button"
                    aria-pressed="true">
                     <i class="fa fa-plus fa-fw"
-                       aria-hidden="true"></i> Add New
+                       aria-hidden="true"></i>
+                    <span th:text="#{addNew}"></span>
                 </a>
             </div>
             <div class="table-responsive">
-                <table class="table">
+                <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>Email</th>
-                        <th>First name</th>
-                        <th>Last name</th>
-                        <th>Action</th>
+                        <th th:text="#{email}"></th>
+                        <th th:text="#{firstName}"></th>
+                        <th th:text="#{lastName}"></th>
+                        <th th:text="#{action}"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -37,7 +38,8 @@
                             <a th:href="${'/user/' + user.getUuid()}"
                                class="btn btn-secondary" role="button" aria-pressed="true">
                                 <i class="fa fa-pencil-square-o fa-fw"
-                                   aria-hidden="true"></i> Edit
+                                   aria-hidden="true"></i>
+                                <span th:text="#{viewDetails}"></span>
                             </a>
                         </td>
                     </tr>

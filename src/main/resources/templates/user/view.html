@@ -5,7 +5,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Users</title>
+    <title th:text="#{userDetails}"></title>
 </head>
 <body>
 <section layout:fragment="content">
@@ -23,6 +23,10 @@
                         </li>
                     </ul>
                 </div>
+                <div class="alert alert-success" role="alert"
+                     th:if="${recordUpdated}"
+                     th:text="#{recordUpdated}">
+                </div>
                 <div class="form-group">
                     <label for="email" th:text="#{email}"></label>
                     <div class="input-group">
@@ -31,18 +35,6 @@
                         </div>
                         <input class="form-control" id="email" name="email" th:field="*{email}"
                                type="text" aria-describedby="inputGroupPrependEmail">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="password" th:text="#{password}"></label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroupPrependPassword">
-                                    <i class="fa fa-key" aria-hidden="true"></i>
-                                </span>
-                        </div>
-                        <input class="form-control" id="password" name="password" th:field="*{password}"
-                               type="password" aria-describedby="inputGroupPrependPassword">
                     </div>
                 </div>
                 <div class="form-group">
@@ -59,9 +51,9 @@
                     <label for="roles" th:text="#{roles}"></label>
                     <select class="form-control" id="roles" name="roles"
                             th:field="*{roles}">
-                        <option th:each="roleName : ${rolesList}"
-                                th:value="${roleName}"
-                                th:text="${roleName}">
+                        <option th:each="role : ${rolesList}"
+                                th:value="${role.getName()}"
+                                th:text="${role.getName()}">
                         </option>
                     </select>
                 </div>

@@ -1,12 +1,14 @@
-package com.archetype.monolithic.webapp.controller.authentication;
+package com.archetype.monolithic.webapp.controller;
 
+import com.archetype.monolithic.webapp.config.Constants;
 import com.archetype.monolithic.webapp.controller.model.UserFormModel;
-import com.archetype.monolithic.webapp.domain.Role;
 import com.archetype.monolithic.webapp.domain.User;
+import com.archetype.monolithic.webapp.repository.RoleRepository;
+import com.archetype.monolithic.webapp.repository.UserRepository;
 import com.archetype.monolithic.webapp.security.RolesConstants;
-import com.archetype.monolithic.webapp.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +23,18 @@ import javax.validation.Valid;
 @Controller
 public class AuthenticationController {
 
-    private final Logger      log = LoggerFactory.getLogger(AuthenticationController.class);
-    private final UserService userService;
+    private final Logger          log = LoggerFactory.getLogger(AuthenticationController.class);
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository  roleRepository;
+    private final UserRepository  userRepository;
 
-    public AuthenticationController(UserService userService) {
-        this.userService = userService;
+    public AuthenticationController(PasswordEncoder passwordEncoder,
+                                    RoleRepository roleRepository,
+                                    UserRepository userRepository) {
+
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepository  = roleRepository;
+        this.userRepository  = userRepository;
     }
 
     /**
@@ -59,14 +68,21 @@ public class AuthenticationController {
         log.debug("POST request to register User : {}", userFormModel);
 
         if (!bindingResult.hasErrors()) {
-            User newUser = new User();
 
-            newUser.setEmail(userFormModel.getEmail().toLowerCase());
-            newUser.setFirstName(userFormModel.getFirstName());
-            newUser.setLastName(userFormModel.getLastName());
-            newUser.addRole(new Role(RolesConstants.USER));
+            User user = new User();
+            user.setEmail(userFormModel.getEmail().toLowerCase());
+            user.setFirstName(userFormModel.getFirstName());
+            user.setLastName(userFormModel.getLastName());
 
-            if (userService.registerUser(newUser, userFormModel.getPassword()).getId() != null) {
+            if (user.getLangKey() == null) {
+                user.setLangKey(Constants.DEFAULT_LANGUAGE);
+            }
+
+            roleRepository.findByName(RolesConstants.USER).ifPresent(user::addRole);
+
+            user.setPassword(passwordEncoder.encode(userFormModel.getPassword()));
+
+            if (userRepository.save(user).getId() != null) {
                 return "authentication/signup-success";
             }
         }
